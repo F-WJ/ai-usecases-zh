@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Agent Use Cases 中文预览 — agentusecases.ai</title>
+<style>
+:root {
+  --bg:#f6f7f9; --card:#fff; --text:#1a1d23; --muted:#5c6570; --border:#e2e6eb;
+  --accent:#2563eb; --accent-soft:#dbeafe; --chip:#eef1f5; --shadow:0 1px 3px rgba(0,0,0,.06);
+  --overlay:rgba(15,18,24,.45);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:#0f1218; --card:#1a1f2a; --text:#e8eaed; --muted:#9aa3b2; --border:#2a3140;
+    --accent:#60a5fa; --accent-soft:#1e3a5f; --chip:#243044; --shadow:0 1px 3px rgba(0,0,0,.35);
+    --overlay:rgba(0,0,0,.55);
+  }
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.55; }
+body.modal-open { overflow:hidden; }
+header { position:sticky; top:0; z-index:10; background:var(--card); border-bottom:1px solid var(--border);
+  padding:12px 16px; box-shadow:var(--shadow); }
+header h1 { margin:0 0 4px; font-size:1.25rem; }
+header p { margin:0; color:var(--muted); font-size:.9rem; }
+.toolbar { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+input[type=search] { flex:1 1 220px; min-width:160px; padding:8px 12px; border:1px solid var(--border);
+  border-radius:8px; background:var(--bg); color:var(--text); font-size:1rem; }
+select { padding:8px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg); color:var(--text); }
+.chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.chip { border:1px solid var(--border); background:var(--chip); color:var(--text); border-radius:999px;
+  padding:5px 12px; cursor:pointer; font-size:.85rem; }
+.chip span { color:var(--muted); margin-left:4px; }
+.chip.active, .chip:hover { background:var(--accent-soft); border-color:var(--accent); color:var(--accent); }
+main { max-width:960px; margin:0 auto; padding:16px; }
+.meta { color:var(--muted); font-size:.9rem; margin-bottom:12px; }
+.grid { display:grid; gap:12px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow);
+  cursor:pointer; transition: border-color .15s, box-shadow .15s; }
+.card:hover, .card:focus-visible { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); outline:none; }
+.card h2 { margin:0 0 6px; font-size:1.05rem; }
+.card .en { color:var(--muted); font-size:.88rem; margin:0 0 8px; display:none; }
+.card.show-en .en, .modal.show-en .en-block { display:block; }
+.en-block { display:none; color:var(--muted); font-size:.9rem; margin:.35rem 0 .8rem; padding:.6rem .75rem; background:var(--bg); border-radius:8px; border:1px dashed var(--border); }
+.badges { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+.badge { background:var(--chip); border-radius:6px; padding:2px 8px; font-size:.78rem; color:var(--muted); }
+.badge.cat { background:var(--accent-soft); color:var(--accent); }
+.summary { margin:0 0 8px; }
+.hint { color:var(--accent); font-size:.82rem; margin:0; }
+.links { display:flex; flex-wrap:wrap; gap:10px; font-size:.88rem; }
+.links a { color:var(--accent); text-decoration:none; }
+.links a:hover { text-decoration:underline; }
+.banner { background:var(--accent-soft); color:var(--accent); padding:8px 12px; border-radius:8px; font-size:.9rem; margin-bottom:12px; }
+footer { text-align:center; color:var(--muted); font-size:.8rem; padding:24px 16px 40px; }
+/* Modal / drawer */
+.backdrop { position:fixed; inset:0; background:var(--overlay); z-index:40; opacity:0; pointer-events:none; transition:opacity .18s; }
+.backdrop.open { opacity:1; pointer-events:auto; }
+.modal { position:fixed; z-index:50; top:0; right:0; height:100%; width:min(560px,100%); background:var(--card);
+  border-left:1px solid var(--border); box-shadow:var(--shadow); transform:translateX(100%); transition:transform .2s ease;
+  display:flex; flex-direction:column; }
+.modal.open { transform:translateX(0); }
+.modal-head { display:flex; align-items:flex-start; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border); }
+.modal-head h2 { margin:0; font-size:1.15rem; flex:1; }
+.modal-body { padding:16px; overflow:auto; flex:1; }
+.modal-body h3 { margin:1.1rem 0 .4rem; font-size:.95rem; color:var(--accent); }
+.modal-body p, .modal-body pre { margin:0 0 .6rem; }
+.modal-body pre { white-space:pre-wrap; word-break:break-word; background:var(--bg); border:1px solid var(--border);
+  border-radius:8px; padding:10px 12px; font-family:inherit; font-size:.92rem; }
+.close { border:none; background:var(--chip); color:var(--text); width:36px; height:36px; border-radius:8px; font-size:1.2rem; cursor:pointer; flex-shrink:0; }
+.close:hover { background:var(--accent-soft); color:var(--accent); }
+.modal-actions { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:4px; }
+.modal-actions label { font-size:.85rem; color:var(--muted); }
+@media (max-width:560px) {
+  .modal { width:100%; border-left:none; border-top:1px solid var(--border); top:auto; bottom:0; height:min(92vh,100%);
+    border-radius:16px 16px 0 0; transform:translateY(100%); }
+  .modal.open { transform:translateY(0); }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Agent Use Cases 中文预览</h1>
+  <p>来源 <a href="https://agentusecases.ai/" style="color:var(--accent)">agentusecases.ai</a> · 预览 <strong>5</strong> 条（含详情）· 本地离线可读</p>
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="搜索中文/英文标题、简介、工具…" autocomplete="off"/>
+    <select id="sort">
+      <option value="date-desc">按日期（新→旧）</option>
+      <option value="date-asc">按日期（旧→新）</option>
+      <option value="title">按中文标题</option>
+    </select>
+    <label style="font-size:.85rem;color:var(--muted)"><input type="checkbox" id="showEn"/> 列表显示英文</label>
+  </div>
+  <div class="chips" id="chips">
+    <button class="chip active" data-cat="" type="button">全部 <span>5</span></button>
+    <button class="chip" data-cat="creative" type="button">创意 <span>1</span></button><button class="chip" data-cat="life" type="button">生活 <span>1</span></button><button class="chip" data-cat="operations" type="button">运营 <span>1</span></button><button class="chip" data-cat="software" type="button">软件开发 <span>1</span></button><button class="chip" data-cat="travel" type="button">旅行 <span>1</span></button>
+  </div>
+</header>
+<main>
+  <div class="banner">精选中文预览：5 条完整详情。点击卡片查看「他们做了什么 / 效果如何 / 注意点 / 可复制提示词」。</div>
+  <div class="meta" id="meta"></div>
+  <div class="grid" id="grid"></div>
+</main>
+<footer>数据嵌入本页，无外部依赖。详情取自官方 /use-case/&lt;id&gt; 页面。翻译仅供阅读参考。</footer>
+
+<div class="backdrop" id="backdrop" hidden></div>
+<aside class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+  <div class="modal-head">
+    <h2 id="modalTitle"></h2>
+    <button class="close" id="closeBtn" type="button" aria-label="关闭">×</button>
+  </div>
+  <div class="modal-body" id="modalBody"></div>
+</aside>
+
+<script>
+const DATA = [{"id": "build-a-c-compiler-with-a-team-of-parallel-agents", "title": "Build a C compiler with a team of parallel agents", "title_zh": "用并行智能体团队构建 C 编译器", "summary": "Anthropic's engineering write-up on tasking Opus 4.6 agent teams with building a C compiler.", "summary_zh": "Anthropic 工程团队的文章，介绍让 Opus 4.6 智能体团队构建一个 C 编译器。", "what_they_did": "Nicholas Carlini ran 16 Claude agents in an endless loop, each in its own Docker container, pushing to a shared git repo. Agents claimed tasks by writing lock files, merged each other's work, and had no orchestrator. Carlini's main work was building tests, CI, and a GCC-based oracle so agents could fix different kernel bugs in parallel.", "what_they_did_zh": "Nicholas Carlini 让 16 个 Claude 智能体在无尽循环中运行，每个都在自己的 Docker 容器里，并推送到共享的 git 仓库。智能体通过写入锁文件认领任务、互相合并对方的工作，且没有编排器。Carlini 的主要工作是构建测试、CI，以及基于 GCC 的对照基准，让智能体可以检查自己的输出。", "how_it_went": "About 2,000 sessions produced a 100,000-line Rust compiler that builds Linux 6.9 on x86, ARM and RISC-V and passes 99% of most test suites. It still calls GCC for 16-bit x86, its assembler and linker are buggy, and its output is inefficient.", "how_it_went_zh": "大约 2000 次会话产出了约 10 万行的 Rust 编译器，可在 x86、ARM 和 RISC-V 上构建 Linux 6.9，并通过大多数测试套件约 99% 的用例。它在 16 位 x86 上仍会调用 GCC，汇编器和链接器有缺陷，生成的代码效率也不高。", "worth_knowing": "It cost just under $20,000 in API fees over two weeks, and the quality of the test harness decided whether agents stayed on track. Run it in a container. Try it yourself with Claude Code", "worth_knowing_zh": "两周 API 费用略低于 2 万美元，测试框架的质量决定了智能体能否保持正轨。请在容器中运行。", "prompt": "I want to build a small [tool, e.g. a Markdown-to-HTML converter in Python] from scratch with a spec-first approach. First write a short spec and a test suite in this folder, then split the work into independent pieces and use sub-agents to implement them in parallel. Stop when all tests pass, and give me a summary of what each sub-agent built and any tests you had to skip.", "prompt_zh": "我想用“规格优先”的方式从零做一个小工具（例如用 Python 写的 Markdown 转 HTML 转换器）。请先在本文件夹写一份简短规格和测试套件，再把工作拆成可独立完成的部分，并用子智能体并行实现。全部测试通过后停下，并告诉我还差什么。", "category": "software", "category_zh": "软件开发", "tools": ["Claude"], "agents": ["Claude"], "link": "https://www.anthropic.com/engineering/building-c-compiler", "source_url": "https://news.ycombinator.com/item?id=46903616", "source_platform": "hn", "source_platform_zh": "Hacker News", "author": "modeless", "score": 735, "date": "2026-02-05", "addedAt": "2026-10-03", "accounts": 2, "page": "https://agentusecases.ai/use-case/build-a-c-compiler-with-a-team-of-parallel-agents"}, {"id": "run-a-solo-company-with-eight-agent-departments", "title": "Run a solo company with eight agent departments", "title_zh": "用八个智能体部门运营一人公司", "summary": "A founder set up CEO, CFO, COO, lawyer, accountant, marketing, CTO, and improver agents that share memory and consult each other.", "summary_zh": "一位创始人设置了 CEO、CFO、COO、律师、会计、市场、CTO 和改进者等智能体，它们共享记忆并相互咨询。", "what_they_did": "The founder wrote eight agents as markdown files in a GitHub Copilot repo. They have MCP tools for X, dev.to, Sentry and scheduling, and all read and write one shared JSONL knowledge graph. A COO agent runs a morning standup and delegates. Agents consult each other by trigger table, for example Marketing sends product claims to the Lawyer. An Improver proposes upgrades as diffs, and the founder reviews them.", "what_they_did_zh": "这位创始人在一个 GitHub Copilot 仓库里用 markdown 文件写了八个智能体。它们有用于 X、dev.to、Sentry 和日程的 MCP 工具，并共同读写一个共享的 JSONL 知识图谱。COO 智能体负责晨会并委派任务。智能体按触发表互相咨询，例如市场相关事项会问律师。", "how_it_went": "After two months: €6.09 revenue, about €42/month infrastructure, 84+ tweets, 5 articles, under an hour a week on marketing, and no missed tax deadlines. Parallel writes corrupted the memory file until he forked the server.", "how_it_went_zh": "两个月后：收入 €6.09，基础设施约每月 €42，发了 84+ 条推文、5 篇文章，每周营销不到一小时，没有错过报税截止日期。并行写入曾损坏记忆文件，直到他 fork 了服务器才解决。", "worth_knowing": "Start with three agents (COO, Marketing, Accountant), not eight. Build the cross-agent review step in from the start. Building it took about 40 hours. Try it yourself with Claude Code", "worth_knowing_zh": "先从三个智能体（COO、市场、会计）开始，不要一上来就上八个。从一开始就建好跨智能体审查步骤。搭建大约花了 40 小时。", "prompt": "Help me set up a set of AI agent roles for my solo business, [business description], with roles like CEO, finance, legal, marketing, and tech. Create a project folder with one instruction file per role and a shared memory file they all read and update. Write a short note on how the roles should consult each other, and stop when the structure is ready for me to try one question.", "prompt_zh": "帮我为我的一人公司（[业务描述]）设置一组 AI 智能体角色，包括 CEO、财务、法务、市场和技术等。请创建一个项目文件夹，每个角色一份说明文件，以及一份大家都会读写更新的共享记忆文件。再写一小段说明：各角色应如何相互咨询，以及我每天应检查什么。", "category": "operations", "category_zh": "运营", "tools": ["GitHub Copilot"], "agents": ["GitHub Copilot"], "link": "", "source_url": "https://dev.to/setas/i-run-a-solo-company-with-ai-agent-departments-50nf", "source_platform": "devto", "source_platform_zh": "DEV", "author": "setas", "score": 61, "date": "2026-03-03", "addedAt": "2026-10-03", "accounts": 1, "page": "https://agentusecases.ai/use-case/run-a-solo-company-with-eight-agent-departments"}, {"id": "plan-a-family-trip-and-pre-fill-bookings", "title": "Plan a family trip and pre-fill bookings", "title_zh": "规划家庭旅行并预填预订信息", "summary": "A reporter had ChatGPT Agent plan a 4-day San Diego trip: it searched flights, compared hotels, built an itinerary and pre-filled booking forms, stopping before purchase.", "summary_zh": "一名记者让 ChatGPT Agent 规划 4 天圣地亚哥之旅：它搜索航班、比较酒店、制定行程并预填预订表单，在付款前停下。", "what_they_did": "The reporter asked ChatGPT Agent to plan a 4-day family trip to San Diego from Newark, with pool hotels and activities for kids under 10, and to save an itinerary in Google Docs. The agent searched Google Flights, compared kid-friendly hotels, and listed attractions such as the zoo and LEGOLAND. It then wrote a daily itinerary with booking links and pre-filled the booking forms.", "what_they_did_zh": "记者让 ChatGPT Agent 规划从纽瓦克出发、为期 4 天的圣地亚哥家庭游，要求酒店带泳池、适合 10 岁以下孩子，并把行程存到 Google Docs。智能体搜索了 Google Flights，比较了亲子友好酒店，并列出动物园、乐高乐园等景点。它还为选定方案预填了预订表单。", "how_it_went": "The itinerary and comparisons came out well, and the reporter called it an incredible planning tool. The agent did not buy anything. She had to confirm bookings herself and says she wouldn't trust AI with that step.", "how_it_went_zh": "行程和比价效果不错，记者称其为出色的规划工具。智能体没有实际购买任何东西。她必须自己确认预订，并表示不会把那一步交给 AI。", "worth_knowing": "Her computer crashed before this task and she had to log back in and start over, so expect to restart now and then. Booking always needs your own approval. Try it yourself with ChatGPT Agent", "worth_knowing_zh": "在做这项任务前她的电脑崩溃过，需要重新登录再来一遍，所以偶尔要准备重启。预订始终需要你自己批准。", "prompt": "Plan a [number]-day family trip to [destination] for [number] people, [dates], with a budget of about [amount]. Search flights, compare three hotels, and build a day-by-day itinerary suited to [ages or interests]. Pre-fill the booking forms for my chosen options, but stop and show me everything before any payment or final submission.", "prompt_zh": "请规划一次 [天数] 天、前往 [目的地]、[人数] 人、日期为 [日期]、预算大约 [金额] 的家庭旅行。搜索航班，比较三家酒店，并制定适合 [年龄或兴趣] 的逐日行程。为我选定的方案预填预订表单，但在购买前停下并把所有内容展示给我确认。", "category": "travel", "category_zh": "旅行", "tools": ["ChatGPT Agent"], "agents": ["ChatGPT Agent"], "link": "", "source_url": "https://tech.yahoo.com/ai/articles/tested-chatgpt-agent-week-good-115833661.html", "source_platform": "web", "source_platform_zh": "网页", "author": "Yahoo Tech / Future", "score": null, "date": "", "addedAt": "2026-10-03", "accounts": 2, "page": "https://agentusecases.ai/use-case/plan-a-family-trip-and-pre-fill-bookings"}, {"id": "produce-a-track-in-ableton-live-by-talking", "title": "Produce a track in Ableton Live by talking", "title_zh": "通过对话在 Ableton Live 中制作音乐", "summary": "An MCP server that lets Codex drive Ableton Live, used to write and mix a full song from chat messages.", "summary_zh": "一个让 Codex 操控 Ableton Live 的 MCP 服务器，仅凭聊天消息完成了一整首歌的创作和混音。", "what_they_did": "The MCP server lets Codex run Python inside Ableton Live's object model, plus built-in tools for common tasks. In the demo, the author sent chat prompts asking for an EDM song with macOS \"say\" vocals, chiptune sounds and 80s drum machines. Follow-up messages then asked for MIDI instruments, fills, dynamics, sidechain and a new element.", "what_they_did_zh": "该 MCP 服务器让 Codex 在 Ableton Live 的对象模型中运行 Python，并提供常见任务的内置工具。演示中，作者用聊天提示要求做一首带 macOS “say” 人声、芯片音乐音色和 80 年代鼓机的 EDM。后续消息再要求加入 MIDI 乐器、过门、鼓点和混音调整。", "how_it_went": "Complete live sets were built from scratch in a few minutes, and follow-up prompts refined them. The README doesn't give quality metrics. One follow-up reported that the new element had no notes, and a later one called it muddy.", "how_it_went_zh": "完整的 Live 工程可在几分钟内从零建好，后续提示还能继续打磨。README 没有给出质量指标。有一次跟进反馈新元素没有音符，再后来有人说听起来浑浊。", "worth_knowing": "Back up your Live Set first, because the MCP edits it directly and could corrupt it. The author has only tested it on Live Suite 12.3.8 on macOS. Try it yourself with Codex", "worth_knowing_zh": "请先备份你的 Live Set，因为 MCP 会直接编辑它，可能造成损坏。作者仅在 macOS 上的 Live Suite 12.3.8 测过。", "prompt": "Help me connect an MCP server for [Ableton Live or my music software] so you can control it from chat. Then create a [genre] track of about [length] with [instruments or mood], adding the drums, bass, and melody and doing a basic mix. Stop when the song plays through start to finish, and tell me what you changed before deleting or overwriting any existing project files.", "prompt_zh": "帮我为 [Ableton Live 或我的音乐软件] 连接 MCP 服务器，以便你能从聊天中控制它。然后创作一首约 [时长] 的 [风格] 曲目，包含 [乐器或氛围]，加入鼓、贝斯和旋律并做基础混音。整首歌能从头播到尾后停下，并告诉我改了什么、我接下来该听哪里。", "category": "creative", "category_zh": "创意", "tools": ["Codex", "MCP"], "agents": ["Codex"], "link": "https://github.com/bschoepke/ableton-live-mcp", "source_url": "https://news.ycombinator.com/item?id=47999656", "source_platform": "hn", "source_platform_zh": "Hacker News", "author": "bschoepke", "score": 123, "date": "2026-05-03", "addedAt": "2026-10-03", "accounts": 1, "page": "https://agentusecases.ai/use-case/produce-a-track-in-ableton-live-by-talking"}, {"id": "get-a-second-opinion-on-an-mri", "title": "Get a second opinion on an MRI", "title_zh": "为 MRI 结果寻求第二意见", "summary": "One person's account of using Claude Code to analyze their own MRI.", "summary_zh": "一个人讲述用 Claude Code 分析自己 MRI 影像的经历。", "what_they_did": "The author gave Claude Code (Opus 4.8, xhigh) a roughly 266 MB DICOM export of a shoulder MRI, let it install packages, and told it only the symptom (2–3 weeks of right shoulder pain). It planned and read the scans for about an hour. A second run used subagents to arbitrate between its report and the doctor's, with extra context supplied.", "what_they_did_zh": "作者把大约 266 MB 的肩部 MRI DICOM 导出交给 Claude Code（Opus 4.8，xhigh），允许它安装软件包，并只告知症状（右肩疼痛 2–3 周）。它规划并阅读影像约一小时。第二次运行用子智能体在它的报告与放射科医生报告之间做仲裁。", "how_it_went": "Opus found an intact tendon, while the doctor reported a Grade III partial tear. The arbitration sided with Opus at moderate-to-high confidence. The author still couldn't fully trust either and is continuing physical therapy.", "how_it_went_zh": "Opus 认为肌腱完好，而医生报告为 III 级部分撕裂。仲裁以中高置信度站在 Opus 一边。作者仍无法完全信任任何一方，并继续接受物理治疗。", "worth_knowing": "Each run took about an hour, and the author stresses the result is unverified and not medical advice. The AI disagreed sharply with the radiologist, so a third human opinion is still needed. Try it yourself with Claude Code", "worth_knowing_zh": "每次运行约一小时，作者强调结果未经核实、并非医疗建议。AI 与放射科医生分歧很大，因此仍需要第三位人类医生的意见。", "prompt": "I have MRI images and the radiologist's report at [folder path]. Walk through the report in plain language, point out what each finding means, and write a list of questions I should ask my doctor. Be clear about what you can't determine from images alone, and don't present anything as a diagnosis.", "prompt_zh": "我在 [文件夹路径] 有 MRI 影像和放射科医生的报告。请用通俗语言解读报告，说明每项发现的含义，并列出我应向医生提出的问题。清楚标明仅凭影像无法判断的部分，不要把任何内容表述为诊断。", "category": "life", "category_zh": "生活", "tools": ["Claude Code"], "agents": ["Claude Code"], "link": "https://antoine.fi/mri-analysis-using-claude-code-opus", "source_url": "https://news.ycombinator.com/item?id=48708941", "source_platform": "hn", "source_platform_zh": "Hacker News", "author": "engmarketer", "score": 566, "date": "2026-06-28", "addedAt": "2026-10-03", "accounts": 1, "page": "https://agentusecases.ai/use-case/get-a-second-opinion-on-an-mri"}];
+const CAT_ZH = {"operations": "运营", "software": "软件开发", "life": "生活", "growth": "增长", "money": "金融/理财", "travel": "旅行", "creative": "创意", "shopping": "购物", "research": "研究", "games": "游戏", "science": "科学"};
+let cat = '';
+let activeId = null;
+const grid = document.getElementById('grid');
+const meta = document.getElementById('meta');
+const q = document.getElementById('q');
+const sortEl = document.getElementById('sort');
+const showEn = document.getElementById('showEn');
+const backdrop = document.getElementById('backdrop');
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modalTitle');
+const modalBody = document.getElementById('modalBody');
+
+function esc(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function filtered() {
+  const term = q.value.trim().toLowerCase();
+  let list = DATA.filter(it => !cat || it.category === cat);
+  if (term) {
+    list = list.filter(it => {
+      const blob = [it.title_zh, it.title, it.summary_zh, it.summary, it.what_they_did_zh, it.category_zh, ...(it.tools||[])].join(' ').toLowerCase();
+      return blob.includes(term);
+    });
+  }
+  const mode = sortEl.value;
+  list = list.slice().sort((a,b) => {
+    if (mode === 'title') return (a.title_zh||'').localeCompare(b.title_zh||'', 'zh');
+    const da = a.date || a.addedAt || '';
+    const db = b.date || b.addedAt || '';
+    return mode === 'date-asc' ? da.localeCompare(db) : db.localeCompare(da);
+  });
+  return list;
+}
+function render() {
+  const list = filtered();
+  meta.textContent = `显示 ${list.length} / ${DATA.length} 条` + (cat ? ` · 分类：${CAT_ZH[cat]||cat}` : '') + ' · 点击卡片查看详情';
+  const enClass = showEn.checked ? ' show-en' : '';
+  grid.innerHTML = list.map(it => {
+    const tools = (it.tools||[]).map(t => `<span class="badge">${esc(t)}</span>`).join('');
+    const date = it.date || it.addedAt || '';
+    return `<article class="card${enClass}" tabindex="0" data-id="${esc(it.id)}" role="button" aria-label="打开详情：${esc(it.title_zh)}">
+      <h2>${esc(it.title_zh)}</h2>
+      <p class="en"><strong>EN</strong> ${esc(it.title)}</p>
+      <div class="badges"><span class="badge cat">${esc(it.category_zh)}</span>${tools}${date?`<span class="badge">${esc(date)}</span>`:''}</div>
+      <p class="summary">${esc(it.summary_zh)}</p>
+      <p class="hint">点击查看完整详情 →</p>
+    </article>`;
+  }).join('');
+}
+function openModal(id) {
+  const it = DATA.find(x => x.id === id); if (!it) return;
+  activeId = id;
+  modalTitle.textContent = it.title_zh;
+  const tools = (it.tools||[]).map(t => `<span class="badge">${esc(t)}</span>`).join('');
+  const agents = (it.agents||[]).map(t => `<span class="badge">${esc(t)}</span>`).join('');
+  const date = it.date || '未标注';
+  const score = it.score != null ? ` · 评分 ${it.score}` : '';
+  modalBody.innerHTML = `
+    <div class="modal-actions">
+      <label><input type="checkbox" id="modalEn"/> 显示英文原文</label>
+    </div>
+    <div class="badges"><span class="badge cat">${esc(it.category_zh)}（${esc(it.category)}）</span>${tools}${agents}</div>
+    <h3>简介</h3>
+    <p>${esc(it.summary_zh)}</p>
+    <div class="en-block"><strong>EN summary</strong><br>${esc(it.summary)}</div>
+    <h3>他们做了什么</h3>
+    <p>${esc(it.what_they_did_zh)}</p>
+    <div class="en-block"><strong>EN — What they did</strong><br>${esc(it.what_they_did)}</div>
+    <h3>效果如何</h3>
+    <p>${esc(it.how_it_went_zh)}</p>
+    <div class="en-block"><strong>EN — How it went</strong><br>${esc(it.how_it_went)}</div>
+    <h3>注意点</h3>
+    <p>${esc(it.worth_knowing_zh)}</p>
+    <div class="en-block"><strong>EN — Worth knowing</strong><br>${esc(it.worth_knowing)}</div>
+    <h3>可复制提示词</h3>
+    <pre>${esc(it.prompt_zh)}</pre>
+    <div class="en-block"><strong>EN — Copy prompt</strong><br><pre style="margin:0;background:transparent;border:0;padding:0">${esc(it.prompt)}</pre></div>
+    <h3>来源与日期</h3>
+    <p>来源：${esc(it.source_platform_zh || it.source_platform)}${it.author?` · ${esc(it.author)}`:''}${score}<br>
+    来源日期：${esc(date)} · 站点收录：${esc(it.addedAt || '—')}${it.accounts!=null?` · 提及账户数：${it.accounts}`:''}</p>
+    <div class="links" style="margin-top:10px">
+      ${it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener">原文 / Source</a>`:''}
+      ${it.source_url?`<a href="${esc(it.source_url)}" target="_blank" rel="noopener">来源讨论</a>`:''}
+      <a href="${esc(it.page)}" target="_blank" rel="noopener">agentusecases.ai 详情页</a>
+    </div>`;
+  document.getElementById('modalEn').checked = showEn.checked;
+  document.getElementById('modalEn').onchange = (e) => modal.classList.toggle('show-en', e.target.checked);
+  modal.classList.toggle('show-en', showEn.checked);
+  backdrop.hidden = false; modal.hidden = false;
+  requestAnimationFrame(() => { backdrop.classList.add('open'); modal.classList.add('open'); });
+  document.body.classList.add('modal-open');
+  document.getElementById('closeBtn').focus();
+}
+function closeModal() {
+  backdrop.classList.remove('open'); modal.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  setTimeout(() => { backdrop.hidden = true; modal.hidden = true; }, 200);
+  activeId = null;
+}
+grid.addEventListener('click', e => {
+  const card = e.target.closest('.card'); if (!card) return;
+  openModal(card.dataset.id);
+});
+grid.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('card')) {
+    e.preventDefault(); openModal(e.target.dataset.id);
+  }
+});
+document.getElementById('closeBtn').onclick = closeModal;
+backdrop.onclick = closeModal;
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && activeId) closeModal(); });
+document.getElementById('chips').addEventListener('click', e => {
+  const btn = e.target.closest('.chip'); if (!btn) return;
+  cat = btn.dataset.cat || '';
+  document.querySelectorAll('.chip').forEach(c => c.classList.toggle('active', c === btn));
+  render();
+});
+q.addEventListener('input', render);
+sortEl.addEventListener('change', render);
+showEn.addEventListener('change', () => {
+  document.querySelectorAll('.card').forEach(c => c.classList.toggle('show-en', showEn.checked));
+});
+render();
+</script>
+</body>
+</html>
